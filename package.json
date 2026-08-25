@@ -1,0 +1,26 @@
+{
+  "name": "rabbit-bytes-creator-connect",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint .",
+    "test": "node --test"
+  },
+  "dependencies": {
+    "@tailwindcss/postcss": "^4.1.14",
+    "jose": "^6.1.0",
+    "lucide-react": "^0.542.0",
+    "next": "16.3.2",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "tailwindcss": "^4.1.14"
+  },
+  "devDependencies": {
+    "eslint": "^9.36.0",
+    "eslint-config-next": "16.3.2"
+  }
+}
