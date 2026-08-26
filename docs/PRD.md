@@ -52,7 +52,7 @@ The seller enters a creator username or keyword. The server calls:
 POST /affiliate_seller/202505/marketplace_creators/search
 ```
 
-The UI displays only fields returned by TikTok Shop, such as avatar, username, display name, Creator Open ID, followers, category, and region. Exact username lookup is not claimed; the UI explains that matches follow TikTok Shop's supported keyword search behavior.
+The UI displays only fields returned by TikTok Shop, such as avatar, username, display name, Creator User ID when present, Creator Open ID, followers, category, and region. It also displays the exact source endpoint, TikTok `request_id`, authorized Shop ID, and synchronization time. Missing identifiers are labeled as not returned and are never fabricated. Exact username lookup is not claimed; the UI explains that matches follow TikTok Shop's supported keyword search behavior.
 
 ## 7. Affiliate Creator Messaging
 
@@ -80,15 +80,9 @@ POST /affiliate_seller/202412/conversations/{conversation_id}/messages
 
 The different endpoint versions are intentional and match their respective TikTok Shop API reference pages. The send button is disabled while a request is running, input is length-limited, and server-side rate protection reduces accidental duplicate sends.
 
-## 8. Affiliate Collaboration
+## 8. Deferred Functionality
 
-The review POC includes a scope-aware availability page but does not fabricate collaboration records or enable incomplete mutations. By default, it displays:
-
-```text
-Affiliate Collaboration API is not enabled for this application.
-```
-
-The optional feature remains disabled until Partner Center approval and exact product, commission, date, creator, contact, and sample-rule inputs required by `POST /affiliate_seller/202508/target_collaborations` are configured and tested.
+Product and order synchronization, partner campaigns, promotions, share links, showcase products, analytics, and affiliate collaboration management are not part of the current review build. Their scopes must not be requested until a corresponding user-visible workflow and endpoint integration are implemented and tested.
 
 ## 9. API Scope Mapping
 
@@ -98,10 +92,8 @@ The optional feature remains disabled until Partner Center approval and exact pr
 | `seller.creator_marketplace.read` | Creator discovery | `POST /affiliate_seller/202505/marketplace_creators/search` | Searches Creator Marketplace for seller-selected matching creators |
 | `seller.affiliate_messages.write` | Create/retrieve creator conversation | `POST /affiliate_seller/202508/conversations` | Starts or retrieves one seller-to-creator affiliate conversation |
 | `seller.affiliate_messages.write` | Send one affiliate message | `POST /affiliate_seller/202412/conversations/{conversation_id}/messages` | Sends seller-authored text to the selected creator |
-| `seller.affiliate_collaboration.read` | Optional collaboration read availability | Approved seller collaboration read endpoint(s) only | Requested only when a reviewed collaboration-read workflow is enabled |
-| `seller.affiliate_collaboration.write` | Optional target collaboration creation | `POST /affiliate_seller/202508/target_collaborations` | Requested only when creation inputs and approved workflow are enabled |
 
-No finance, fulfillment, logistics, customer-service buyer messaging, live-data, or bestseller scopes are required.
+No product, order, partner campaign, promotion, share-link, showcase-product, analytics, affiliate-collaboration, finance, fulfillment, logistics, customer-service buyer messaging, live-data, or bestseller scopes are required.
 
 ## 10. Data Flow
 
@@ -115,7 +107,6 @@ flowchart LR
     App --> TikTokShopAPI[TikTok Shop Open API]
     TikTokShopAPI --> CreatorMarketplace[Creator Marketplace]
     TikTokShopAPI --> AffiliateMessaging[Affiliate Messaging]
-    TikTokShopAPI -. only when approved .-> AffiliateCollaboration[Affiliate Collaboration]
 ```
 
 The browser never calls TikTok Shop directly. It sends validated requests to the Next.js server, which retrieves the encrypted session, refreshes the token if required, signs the exact path/query/body bytes, and calls TikTok Shop.

@@ -49,7 +49,6 @@ The project intentionally does not include bulk messaging, scraping, background 
 | `TIKTOK_SHOP_SERVICE_ID` | Yes | Seller authorization service ID from Partner Center |
 | `TIKTOK_SHOP_REDIRECT_URI` | Yes | Registered callback URI |
 | `TIKTOK_SHOP_MARKET` | Yes | `ROW` or `US`; determines the seller authorization domain |
-| `TIKTOK_COLLABORATION_ENABLED` | No | Keep `false` until collaboration scopes are approved |
 
 `TIKTOK_SHOP_SERVICE_ID` is intentionally separate from `TIKTOK_SHOP_APP_KEY`. Current TikTok Shop seller authorization URLs require `service_id`, while business API calls require `app_key`.
 
@@ -69,11 +68,13 @@ The authorization flow is:
 4. The app calls `GET /authorization/202309/shops` and stores all returned authorized shops and their ciphers with the token response. When more than one shop is returned, the reviewer can select the shop used by subsequent API calls.
 5. Access tokens are refreshed server-side when close to expiry and a refresh token is present.
 
-Configure only the scopes required for the approved product:
+Configure only the scopes used by the current review build:
 
-- `seller.creator_marketplace.read`
-- `seller.affiliate_messages.write`
-- `seller.affiliate_collaboration.read` and/or `seller.affiliate_collaboration.write` only when the optional collaboration workflow is approved
+- **Shop Authorized Information** — retrieves the authorized shop and `shop_cipher`
+- **Read Creator Marketplace** (`seller.creator_marketplace.read`) — searches Creator Marketplace
+- **Manage Affiliate Messages** (`seller.affiliate_messages.write`) — creates one conversation and sends one seller-authored message
+
+Do not include Product Basic, Promotion Information, Partner Campaign, Share Link, Showcase Product, Analytics, or Affiliate Collaboration scopes in this review build. Those workflows are not implemented.
 
 ## Vercel deployment
 
