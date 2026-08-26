@@ -8,7 +8,16 @@ export const metadata = { title: "Shop Connection" };
 
 function formatDate(value) {
   if (!value) return "Not returned";
-  return new Intl.DateTimeFormat("en", { dateStyle: "medium", timeStyle: "short", timeZoneName: "short" }).format(new Date(value));
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return "Not returned";
+  return new Intl.DateTimeFormat("en", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    timeZoneName: "short",
+  }).format(date);
 }
 
 export default async function ShopPage({ searchParams }) {
