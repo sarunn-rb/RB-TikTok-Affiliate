@@ -6,8 +6,7 @@ import { cleanText } from "@/lib/validation";
 import { clientAddress, validateSameOrigin } from "@/lib/security";
 import { rateLimit } from "@/lib/rate-limit";
 import { normalizeCreator } from "@/lib/tiktok/creators";
-
-const CREATOR_SEARCH_ENDPOINT = "/affiliate_seller/202505/marketplace_creators/search";
+import { CREATOR_SEARCH_ENDPOINT } from "@/lib/tiktok/endpoints";
 
 export async function POST(request) {
   const unauthorized = await requireReviewerApi();
