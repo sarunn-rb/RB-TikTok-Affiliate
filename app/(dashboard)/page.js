@@ -15,8 +15,8 @@ export default async function OverviewPage() {
   const steps = [
     ["Connect Shop", "Authorize your TikTok Shop."],
     ["Find Creator", "Search Creator Marketplace."],
-    ["Start Conversation", "Create one conversation."],
-    ["Send Message", "Send a direct affiliate message."],
+    ["Start Conversation", "Attempt to create or retrieve one conversation."],
+    ["Verify Messaging", "Send only when TikTok Shop returns a conversation ID."],
   ];
 
   return (
@@ -31,7 +31,7 @@ export default async function OverviewPage() {
         <section className="panel panel-pad"><h2 className="panel-title">Capabilities</h2><div className="capability-list">{capabilities.map(({ name, icon: Icon, active }) => <div className="capability-row" key={name}><span className="capability-icon"><Icon size={18} /></span><span className="capability-name">{name}</span><span className="capability-state">{!connection.connected ? "Waiting for shop connection" : active ? "Available for this session" : "Scope not granted"}</span></div>)}</div></section>
         <div className="split">
           <section className="panel panel-pad"><h2 className="panel-title">Getting started workflow</h2><div className="workflow">{steps.map(([title, copy], index) => <div className="workflow-step" key={title}><span className="step-number">{index + 1}</span><strong>{title}</strong><p>{copy}</p></div>)}</div></section>
-          <section className="panel panel-pad"><h2 className="panel-title">Review checklist</h2><div className="checklist">{["Connect TikTok Shop", "Search one creator", "Create a conversation", "Send a test message"].map((label) => <div className="check-item" key={label}><span className="check-circle" />{label}</div>)}</div></section>
+          <section className="panel panel-pad"><h2 className="panel-title">Review checklist</h2><div className="checklist">{["Connect TikTok Shop", "Search one creator", "Attempt conversation creation", "Verify success or eligibility response"].map((label) => <div className="check-item" key={label}><span className="check-circle" />{label}</div>)}</div></section>
         </div>
       </div>
     </div>

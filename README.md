@@ -82,7 +82,7 @@ Do not include Product Basic, Promotion Information, Partner Campaign, Share Lin
 2. Add the environment variables from `.env.example` to the Production environment.
 3. Set the Partner Center Redirect URL to the production callback shown above.
 4. Deploy and wait for the deployment to reach `READY`.
-5. Verify login, seller authorization, creator search, conversation creation, and one test message using a permitted real seller/test setup.
+5. Verify login, seller authorization, and creator search. Attempt conversation creation; send one test message only if TikTok Shop returns a conversation ID. Test accounts may instead return the expected eligibility error `16030009`.
 
 No secret belongs in the repository or in a `NEXT_PUBLIC_*` variable.
 

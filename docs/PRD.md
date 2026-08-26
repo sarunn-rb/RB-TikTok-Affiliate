@@ -49,10 +49,10 @@ Route: `/creators`
 The seller enters a creator username or keyword. The server calls:
 
 ```text
-POST /affiliate_seller/202505/marketplace_creators/search
+POST /affiliate_seller/202608/marketplace_creators/search
 ```
 
-The UI displays only fields returned by TikTok Shop, such as avatar, username, display name, Creator User ID when present, Creator Open ID, followers, category, and region. It also displays the exact source endpoint, TikTok `request_id`, authorized Shop ID, and synchronization time. Missing identifiers are labeled as not returned and are never fabricated. Exact username lookup is not claimed; the UI explains that matches follow TikTok Shop's supported keyword search behavior.
+The UI displays only fields returned by TikTok Shop, such as avatar, username, display name, Creator Open ID, followers, category, and region. It also displays the exact source endpoint, TikTok `request_id`, authorized Shop ID, and synchronization time. Missing identifiers are labeled as not returned and are never fabricated. Exact username lookup is not claimed; the UI explains that matches follow TikTok Shop's supported keyword search behavior.
 
 ## 7. Affiliate Creator Messaging
 
@@ -89,7 +89,7 @@ Product and order synchronization, partner campaigns, promotions, share links, s
 | Scope | Feature | Endpoint(s) | Why required |
 | --- | --- | --- | --- |
 | Seller authorization / authorized shop access configured for the app | Shop connection | `GET /authorization/202309/shops` | Retrieves seller-authorized shops and the correct `shop_cipher` after token exchange |
-| `seller.creator_marketplace.read` | Creator discovery | `POST /affiliate_seller/202505/marketplace_creators/search` | Searches Creator Marketplace for seller-selected matching creators |
+| `seller.creator_marketplace.read` | Creator discovery | `POST /affiliate_seller/202608/marketplace_creators/search` | Searches Creator Marketplace for seller-selected matching creators |
 | `seller.affiliate_messages.write` | Create/retrieve creator conversation | `POST /affiliate_seller/202508/conversations` | Starts or retrieves one seller-to-creator affiliate conversation |
 | `seller.affiliate_messages.write` | Send one affiliate message | `POST /affiliate_seller/202412/conversations/{conversation_id}/messages` | Sends seller-authored text to the selected creator |
 
@@ -125,7 +125,7 @@ The browser never calls TikTok Shop directly. It sends validated requests to the
 
 ## 12. Error Handling
 
-TikTok Shop responses are mapped to reviewer-friendly guidance. Eligibility, quota, privacy, and region errors are returned once and not automatically retried. Important handled codes include `16030002`, `16030003`, `16030007`, `16030009`, `16030100`, `16030101`, `16032001`, `45101004`, and `45101021`.
+TikTok Shop responses are mapped to reviewer-friendly guidance. Eligibility, quota, privacy, and region errors are returned once and not automatically retried. Important handled codes include `16030002`, `16030003`, `16030007`, `16030009`, `16030100`, `16030101`, `16032001`, `45101004`, and `45101021`. TikTok Shop test accounts may return `16030009` during conversation creation, before a `conversation_id` exists; the UI displays the code and TikTok request ID as the expected sandbox eligibility result.
 
 Each TikTok API result is logged server-side with only:
 

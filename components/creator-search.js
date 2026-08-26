@@ -89,7 +89,6 @@ export function CreatorSearch({ connected }) {
                 </div>
                 <div><strong>{creator.name || creator.username || "TikTok creator"}</strong>{creator.username && <span>@{creator.username.replace(/^@/, "")}</span>}
                   <dl className="creator-identifiers">
-                    <div><dt>TikTok Creator User ID</dt><dd><code>{creator.creatorUserId || "Not returned by this endpoint"}</code></dd></div>
                     <div><dt>Creator Open ID</dt><dd><code>{creator.creatorOpenId || "Not returned by this endpoint"}</code></dd></div>
                   </dl>
                 </div>
