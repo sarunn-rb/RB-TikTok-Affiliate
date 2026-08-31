@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import {
-  BookOpenCheck, Home, Menu, MessageSquare, Settings, Store, Users, X,
+  BookOpenCheck, Database, Home, Menu, MessageSquare, Settings, Store, Users, X,
 } from "lucide-react";
 import { Brand } from "@/components/brand";
 import { LogoutButton } from "@/components/logout-button";
@@ -12,6 +12,7 @@ import { LogoutButton } from "@/components/logout-button";
 const navigation = [
   { href: "/", label: "Overview", icon: Home },
   { href: "/shop", label: "Shop Connection", icon: Store },
+  { href: "/data-sync", label: "Data Sync", icon: Database },
   { href: "/creators", label: "Creators", icon: Users },
   { href: "/messages", label: "Messages", icon: MessageSquare },
   { href: "/settings", label: "Settings", icon: Settings },

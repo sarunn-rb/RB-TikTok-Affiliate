@@ -6,9 +6,9 @@
 https://rb-tiktok-affiliate.vercel.app
 ```
 
-## Step-by-step Product Testing Instructions (496 characters)
+## Step-by-step Product Testing Instructions (464 characters)
 
-> 1. Sign in with reviewer credentials. 2. Open Shop Connection, connect a TikTok Shop, and approve authorization. 3. Confirm the connected shop details. 4. Open Creators, search a keyword, and verify the TikTok request ID, Shop ID, sync time, and Creator Open ID. 5. Select Message creator, then click Create or retrieve conversation. 6. If a conversation ID appears, send one test message. Test accounts may instead return error 16030009 because TikTok Shop blocks affiliate messaging in sandbox.
+> 1. Sign in with reviewer credentials. 2. Open Shop Connection and authorize the TikTok Shop. 3. Open Data Sync, click Sync TikTok Shop data, and verify the Shop ID, endpoints, request IDs, sync time, Product IDs starting with 17, and Order IDs starting with 57 or 58. 4. Open Creators, search a keyword, and verify the Creator Open ID and source data. 5. Select a creator and attempt conversation creation. Test accounts may return error 16030009 before messaging.
 
 ## Brief List of Product Features
 
@@ -16,6 +16,8 @@ https://rb-tiktok-affiliate.vercel.app
 - TikTok Shop seller authorization with CSRF-safe OAuth state validation
 - Secure temporary seller token and shop session in encrypted HTTP-only cookies
 - Authorized shop information with masked shop cipher and token expiry status
+- On-demand, read-only product and order synchronization
+- Exact Product ID and Order ID display with endpoint-specific request provenance
 - TikTok Shop Creator Marketplace search by username or keyword
 - TikTok response provenance with endpoint, request ID, Shop ID, and synchronization time
 - Creator Open ID display exactly as returned by TikTok Shop
@@ -24,11 +26,13 @@ https://rb-tiktok-affiliate.vercel.app
 - Reviewer-friendly TikTok business error handling
 - In-product App Review testing guide
 
-The application does not implement product or order synchronization, affiliate partner campaigns, promotion management, share links, showcase products, analytics, affiliate collaboration management, bulk messaging, automated outreach, creator scraping, schedulers, queues, or fake dashboard metrics.
+The application does not modify products or orders and does not implement affiliate partner campaigns, promotion management, share links, showcase products, analytics, affiliate collaboration management, bulk messaging, automated outreach, creator scraping, schedulers, queues, or fake dashboard metrics.
 
 ## Current Review Scopes
 
 - **Shop Authorized Information**
+- **Product Basic** (`seller.product.basic`)
+- **Order Information** (`seller.order.info`)
 - **Read Creator Marketplace** (`seller.creator_marketplace.read`)
 - **Manage Affiliate Messages** (`seller.affiliate_messages.write`)
 
@@ -37,5 +41,6 @@ No other scope is exercised by the current review build.
 ## Suggested Product Screenshots
 
 1. **Shop Connection** — connected state with shop details and masked shop cipher
-2. **Creator Search** — real Creator Marketplace search results with source endpoint, TikTok request ID, authorized Shop ID, synchronization time, and Creator Open ID
-3. **Creator Messaging** — selected creator and either a `conversation_id` or the TikTok Shop test-account eligibility response with error code and request ID
+2. **TikTok Shop Data Sync** — real Product IDs and Order IDs with source endpoints, TikTok request IDs, authorized Shop ID, and synchronization time
+3. **Creator Search** — real Creator Marketplace search results with source endpoint, TikTok request ID, authorized Shop ID, synchronization time, and Creator Open ID
+4. **Creator Messaging** — selected creator and either a `conversation_id` or the TikTok Shop test-account eligibility response with error code and request ID

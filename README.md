@@ -1,6 +1,6 @@
 # Rabbit Bytes Creator Connect
 
-Production-oriented proof of concept for TikTok Shop Public App Review. The application lets an authenticated reviewer connect one seller account, search TikTok Shop Creator Marketplace, create or retrieve one affiliate conversation, and send one message to the selected creator.
+Production-oriented proof of concept for TikTok Shop Public App Review. The application lets an authenticated reviewer connect one seller account, synchronize read-only product and order evidence, search TikTok Shop Creator Marketplace, create or retrieve one affiliate conversation, and send one message to the selected creator.
 
 The project intentionally does not include bulk messaging, scraping, background jobs, fake analytics, or a database.
 
@@ -71,10 +71,12 @@ The authorization flow is:
 Configure only the scopes used by the current review build:
 
 - **Shop Authorized Information** — retrieves the authorized shop and `shop_cipher`
+- **Product Basic** (`seller.product.basic`) — retrieves read-only product IDs and basic product fields
+- **Order Information** (`seller.order.info`) — retrieves read-only order IDs and basic order fields
 - **Read Creator Marketplace** (`seller.creator_marketplace.read`) — searches Creator Marketplace
 - **Manage Affiliate Messages** (`seller.affiliate_messages.write`) — creates one conversation and sends one seller-authored message
 
-Do not include Product Basic, Promotion Information, Partner Campaign, Share Link, Showcase Product, Analytics, or Affiliate Collaboration scopes in this review build. Those workflows are not implemented.
+Do not include Promotion Information, Partner Campaign, Share Link, Showcase Product, Analytics, or Affiliate Collaboration scopes in this review build. Those workflows are not implemented.
 
 ## Vercel deployment
 
@@ -82,7 +84,7 @@ Do not include Product Basic, Promotion Information, Partner Campaign, Share Lin
 2. Add the environment variables from `.env.example` to the Production environment.
 3. Set the Partner Center Redirect URL to the production callback shown above.
 4. Deploy and wait for the deployment to reach `READY`.
-5. Verify login, seller authorization, and creator search. Attempt conversation creation; send one test message only if TikTok Shop returns a conversation ID. Test accounts may instead return the expected eligibility error `16030009`.
+5. Verify login and seller authorization. Open Data Sync and confirm real product/order IDs with their endpoint, request ID, Shop ID, and synchronization time. Then verify creator search and attempt conversation creation; send one test message only if TikTok Shop returns a conversation ID. Test accounts may instead return the expected eligibility error `16030009`.
 
 No secret belongs in the repository or in a `NEXT_PUBLIC_*` variable.
 

@@ -2,7 +2,7 @@
 
 ## 1. Product Overview
 
-Rabbit Bytes Creator Connect is a focused TikTok Shop Public App Review POC. It gives an authorized seller a simple, secure workflow to discover one affiliate creator, create or retrieve one conversation, and send one intentional affiliate message.
+Rabbit Bytes Creator Connect is a focused TikTok Shop Public App Review POC. It gives an authorized seller a simple, secure workflow to verify synchronized shop data, discover one affiliate creator, create or retrieve one conversation, and send one intentional affiliate message.
 
 Short description: **Manage TikTok Shop creator outreach and affiliate collaboration workflows more efficiently.**
 
@@ -21,6 +21,7 @@ Seller teams often move between creator discovery and outreach tools. This produ
 ```text
 Reviewer login
 → Connect TikTok Shop seller
+→ Synchronize product and order evidence
 → Search Creator Marketplace
 → Select one creator
 → Create or retrieve conversation
@@ -42,7 +43,20 @@ No step permits selecting multiple recipients or scheduling automated outreach.
 
 Local and cross-border sellers use the shop returned by the authorization response. No shop ID or cipher is hardcoded.
 
-## 6. Creator Discovery
+## 6. TikTok Shop Data Sync
+
+Route: `/data-sync`
+
+The reviewer starts an on-demand, read-only synchronization. The server performs these independent calls in parallel:
+
+```text
+POST /product/202502/products/search
+POST /order/202309/orders/search
+```
+
+The Product request uses `status: ALL`. The Order request sorts the latest records by `create_time` descending. Each request is limited to 20 records for review clarity. The UI shows the exact Product ID or Order ID returned by TikTok Shop, the authorized Shop ID, source endpoint, endpoint-specific TikTok `request_id`, and synchronization time. No product, order, or buyer data is modified; buyer personally identifiable information is not rendered. Empty results and partial endpoint errors are shown as returned and are never replaced with fabricated records.
+
+## 7. Creator Discovery
 
 Route: `/creators`
 
@@ -54,7 +68,7 @@ POST /affiliate_seller/202608/marketplace_creators/search
 
 The UI displays only fields returned by TikTok Shop, such as avatar, username, display name, Creator Open ID, followers, category, and region. It also displays the exact source endpoint, TikTok `request_id`, authorized Shop ID, and synchronization time. Missing identifiers are labeled as not returned and are never fabricated. Exact username lookup is not claimed; the UI explains that matches follow TikTok Shop's supported keyword search behavior.
 
-## 7. Affiliate Creator Messaging
+## 8. Affiliate Creator Messaging
 
 Route: `/messages`
 
@@ -80,22 +94,24 @@ POST /affiliate_seller/202412/conversations/{conversation_id}/messages
 
 The different endpoint versions are intentional and match their respective TikTok Shop API reference pages. The send button is disabled while a request is running, input is length-limited, and server-side rate protection reduces accidental duplicate sends.
 
-## 8. Deferred Functionality
+## 9. Deferred Functionality
 
-Product and order synchronization, partner campaigns, promotions, share links, showcase products, analytics, and affiliate collaboration management are not part of the current review build. Their scopes must not be requested until a corresponding user-visible workflow and endpoint integration are implemented and tested.
+Product and order mutation, partner campaigns, promotions, share links, showcase products, analytics, and affiliate collaboration management are not part of the current review build. Their scopes must not be requested until a corresponding user-visible workflow and endpoint integration are implemented and tested.
 
-## 9. API Scope Mapping
+## 10. API Scope Mapping
 
 | Scope | Feature | Endpoint(s) | Why required |
 | --- | --- | --- | --- |
 | Seller authorization / authorized shop access configured for the app | Shop connection | `GET /authorization/202309/shops` | Retrieves seller-authorized shops and the correct `shop_cipher` after token exchange |
+| `seller.product.basic` | Read-only product synchronization | `POST /product/202502/products/search` | Displays exact product records and Product IDs for the authorized shop |
+| `seller.order.info` | Read-only order synchronization | `POST /order/202309/orders/search` | Displays exact order records and Order IDs for the authorized shop |
 | `seller.creator_marketplace.read` | Creator discovery | `POST /affiliate_seller/202608/marketplace_creators/search` | Searches Creator Marketplace for seller-selected matching creators |
 | `seller.affiliate_messages.write` | Create/retrieve creator conversation | `POST /affiliate_seller/202508/conversations` | Starts or retrieves one seller-to-creator affiliate conversation |
 | `seller.affiliate_messages.write` | Send one affiliate message | `POST /affiliate_seller/202412/conversations/{conversation_id}/messages` | Sends seller-authored text to the selected creator |
 
-No product, order, partner campaign, promotion, share-link, showcase-product, analytics, affiliate-collaboration, finance, fulfillment, logistics, customer-service buyer messaging, live-data, or bestseller scopes are required.
+No product/order mutation, partner campaign, promotion, share-link, showcase-product, analytics, affiliate-collaboration, finance, fulfillment, logistics, customer-service buyer messaging, live-data, or bestseller scopes are required.
 
-## 10. Data Flow
+## 11. Data Flow
 
 ```mermaid
 flowchart LR
@@ -105,13 +121,15 @@ flowchart LR
     TikTokOAuth --> App
     App --> Session[Encrypted HTTP-only session]
     App --> TikTokShopAPI[TikTok Shop Open API]
+    TikTokShopAPI --> ProductData[Product Data]
+    TikTokShopAPI --> OrderData[Order Data]
     TikTokShopAPI --> CreatorMarketplace[Creator Marketplace]
     TikTokShopAPI --> AffiliateMessaging[Affiliate Messaging]
 ```
 
 The browser never calls TikTok Shop directly. It sends validated requests to the Next.js server, which retrieves the encrypted session, refreshes the token if required, signs the exact path/query/body bytes, and calls TikTok Shop.
 
-## 11. Security and Privacy
+## 12. Security and Privacy
 
 - Review authentication uses environment variables and an encrypted HTTP-only cookie; no user database is present.
 - Reviewer session, TikTok credential session, and OAuth state use separate JWE-encrypted cookies.
@@ -119,11 +137,11 @@ The browser never calls TikTok Shop directly. It sends validated requests to the
 - OAuth state is random, validated, short-lived, and single-use.
 - App secret, access token, refresh token, and reviewer password never enter the browser bundle or API response.
 - Mutating API routes enforce same-origin requests.
-- Search, conversation creation, message send, and login endpoints have basic per-instance rate protection.
+- Data synchronization, creator search, conversation creation, message send, and login endpoints have basic per-instance rate protection.
 - Logging out clears all temporary sessions; disconnecting clears the TikTok credential session.
 - No TikTok credentials are stored in `localStorage` or committed to Git.
 
-## 12. Error Handling
+## 13. Error Handling
 
 TikTok Shop responses are mapped to reviewer-friendly guidance. Eligibility, quota, privacy, and region errors are returned once and not automatically retried. Important handled codes include `16030002`, `16030003`, `16030007`, `16030009`, `16030100`, `16030101`, `16032001`, `45101004`, and `45101021`. TikTok Shop test accounts may return `16030009` during conversation creation, before a `conversation_id` exists; the UI displays the code and TikTok request ID as the expected sandbox eligibility result.
 
@@ -139,7 +157,7 @@ timestamp
 
 Secrets, tokens, and reviewer passwords are excluded.
 
-## 13. Deployment Architecture
+## 14. Deployment Architecture
 
 - Vercel hosts the Next.js application and server route handlers.
 - Vercel environment variables hold reviewer and TikTok Shop credentials.

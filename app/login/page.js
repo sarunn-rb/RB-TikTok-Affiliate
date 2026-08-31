@@ -14,7 +14,7 @@ export default async function LoginPage() {
         <div className="login-side-content">
           <h2>Creator outreach, with every message intentional.</h2>
           <p>Manage TikTok Shop creator discovery and affiliate conversations through an official seller-authorized workflow.</p>
-          <div className="login-workflow" aria-label="Application workflow"><span>Connect Shop</span><span>Find Creator</span><span>Start Conversation</span><span>Send Message</span></div>
+          <div className="login-workflow" aria-label="Application workflow"><span>Connect Shop</span><span>Sync Shop Data</span><span>Find Creator</span><span>Send Message</span></div>
         </div>
         <small>Rabbit Bytes Creator Connect · Public App Review POC</small>
       </section>

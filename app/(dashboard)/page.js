@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Link2, MessageSquare, Store, Users } from "lucide-react";
+import { Database, Link2, MessageSquare, PackageSearch, ReceiptText, Users } from "lucide-react";
 import { PageHeading } from "@/components/page-heading";
 import { ConnectButton } from "@/components/shop-actions";
 import { getTikTokSession } from "@/lib/session";
@@ -11,12 +11,14 @@ export default async function OverviewPage() {
   const capabilities = [
     { name: "Creator Marketplace", icon: Users, active: hasScope(rawSession, "seller.creator_marketplace.read") },
     { name: "Affiliate Messaging", icon: MessageSquare, active: hasScope(rawSession, "seller.affiliate_messages.write") },
+    { name: "Product Data", icon: PackageSearch, active: hasScope(rawSession, "seller.product.basic") },
+    { name: "Order Data", icon: ReceiptText, active: hasScope(rawSession, "seller.order.info") },
   ];
   const steps = [
     ["Connect Shop", "Authorize your TikTok Shop."],
+    ["Sync Shop Data", "Verify live product and order IDs."],
     ["Find Creator", "Search Creator Marketplace."],
-    ["Start Conversation", "Attempt to create or retrieve one conversation."],
-    ["Verify Messaging", "Send only when TikTok Shop returns a conversation ID."],
+    ["Verify Messaging", "Attempt one creator conversation."],
   ];
 
   return (
@@ -26,12 +28,12 @@ export default async function OverviewPage() {
         <section className="panel connection-hero">
           <div className="connection-icon"><Link2 size={31} strokeWidth={1.7} /></div>
           <div><div className="connection-title-line"><h2>TikTok Shop connection</h2><span className={`status ${connection.connected ? "status-success" : "status-neutral"}`}>{connection.connected ? "Connected" : "Not connected"}</span></div><p className="connection-copy">{connection.connected ? `${connection.shop.name}${connection.shop.region ? ` · ${connection.shop.region}` : ""}` : "Connect your TikTok Shop to unlock creator discovery and one-to-one affiliate messaging."}</p></div>
-          {connection.connected ? <Link className="btn btn-secondary" href="/shop"><Store size={16} />View connection</Link> : <ConnectButton />}
+          {connection.connected ? <Link className="btn btn-secondary" href="/data-sync"><Database size={16} />Open Data Sync</Link> : <ConnectButton />}
         </section>
         <section className="panel panel-pad"><h2 className="panel-title">Capabilities</h2><div className="capability-list">{capabilities.map(({ name, icon: Icon, active }) => <div className="capability-row" key={name}><span className="capability-icon"><Icon size={18} /></span><span className="capability-name">{name}</span><span className="capability-state">{!connection.connected ? "Waiting for shop connection" : active ? "Available for this session" : "Scope not granted"}</span></div>)}</div></section>
         <div className="split">
           <section className="panel panel-pad"><h2 className="panel-title">Getting started workflow</h2><div className="workflow">{steps.map(([title, copy], index) => <div className="workflow-step" key={title}><span className="step-number">{index + 1}</span><strong>{title}</strong><p>{copy}</p></div>)}</div></section>
-          <section className="panel panel-pad"><h2 className="panel-title">Review checklist</h2><div className="checklist">{["Connect TikTok Shop", "Search one creator", "Attempt conversation creation", "Verify success or eligibility response"].map((label) => <div className="check-item" key={label}><span className="check-circle" />{label}</div>)}</div></section>
+          <section className="panel panel-pad"><h2 className="panel-title">Review checklist</h2><div className="checklist">{["Connect TikTok Shop", "Verify product and order IDs", "Search one creator", "Verify messaging or eligibility response"].map((label) => <div className="check-item" key={label}><span className="check-circle" />{label}</div>)}</div></section>
         </div>
       </div>
     </div>

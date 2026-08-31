@@ -56,7 +56,7 @@ export function ShopSelector({ shops }) {
   return (
     <div className="shop-selector">
       <h3>Authorized shops</h3>
-      <p>Select which shop and shop cipher to use for Creator Marketplace and Affiliate Seller API calls.</p>
+      <p>Select which shop and shop cipher to use for product, order, Creator Marketplace, and Affiliate Seller API calls.</p>
       <div className="shop-options">
         {shops.map((shop) => (
           <button key={`${shop.id || shop.name}-${shop.index}`} className={`shop-option ${shop.selected ? "shop-option-active" : ""}`} onClick={() => selectShop(shop.index)} disabled={pending !== null || shop.selected}>
